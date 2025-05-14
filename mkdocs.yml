@@ -1,0 +1,6 @@
+site_name: Glückliche Rinne
+nav:
+  - Getting Started: getting-started.md
+  - Language Specification: language-spec.md
+  - About: about.md
+theme: readthedocs
