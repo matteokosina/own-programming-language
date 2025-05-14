@@ -16,6 +16,12 @@ import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
+    private CodeLocation getCodeLocation(ParserRuleContext ctx) {
+        int line = ctx.getStart().getLine();
+        int column = ctx.getStart().getCharPositionInLine();
+        return new CodeLocation(line, column);
+    }
+
     @Override
     public AstNode visitProgram(RinneParser.ProgramContext ctx) {
         CodeLocation codeLoc = getCodeLocation(ctx);
@@ -52,10 +58,20 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
         return new AstVariableReferenceNode(codeLoc, name);
     }
 
-    private CodeLocation getCodeLocation(ParserRuleContext ctx) {
-        int line = ctx.getStart().getLine();
-        int column = ctx.getStart().getCharPositionInLine();
-        return new CodeLocation(line, column);
-    }
+    // Team 1
+
+    // Team 2
+
+    // Team 3
+
+    // Team 4
+
+    // Team 5
+
+    // Team 6
+
+    // Team 7
+
+    // Team 8
 
 }

@@ -10,6 +10,14 @@ public class AstPrinter extends AstVisitor<String> {
         return level <= 1 ? "" : INDENTATION_PER_LEVEL + indentationFor(level - 1);
     }
 
+    public void enterNode() {
+        ++level;
+    }
+
+    public void exitNode() {
+        --level;
+    }
+
     @Override
     String visitChildren(AstNode node) {
         StringBuilder builder = new StringBuilder();
@@ -43,12 +51,20 @@ public class AstPrinter extends AstVisitor<String> {
         return temp;
     }
 
-    public void enterNode() {
-        ++level;
-    }
+    // Team 1
 
-    public void exitNode() {
-        --level;
-    }
+    // Team 2
+
+    // Team 3
+
+    // Team 4
+
+    // Team 5
+
+    // Team 6
+
+    // Team 7
+
+    // Team 8
 
 }
