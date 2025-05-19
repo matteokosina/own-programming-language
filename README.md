@@ -4,13 +4,22 @@
 
 ## 📚 Documentation
 
-Whether you're a developer or a user, the full documentation for *glückliche Rinne* — including getting started instructions — is located in the `docs/` directory.
+Whether you're a developer or a user, the full documentation for *glückliche Rinne* — including getting started instructions — is located in the `docs/` directory and is also available online.
 
-You can view the documentation in two ways:
+### 🔗 View Online
+
+You can browse the documentation at: https://marco-haupt.github.io/glueckliche-rinne
+
+The site is automatically built and deployed from the `gh-pages` branch using a GitHub Actions workflow.
+
+### 📄 View Locally
+
+If you prefer to read the docs locally, you have two options:
+
 - 📄 **Read the Markdown files** directly in the `docs/` folder.
 - 🌐 **Serve it locally in your browser** using [MkDocs](https://www.mkdocs.org/).
 
-### Serving the Documentation Locally
+#### Serving the Documentation Locally
 
 If you prefer a browser-based view, follow these steps:
 
@@ -26,7 +35,7 @@ If you prefer a browser-based view, follow these steps:
 
 This will launch a local web server, usually at http://127.0.0.1:8000, where you can browse the docs.
 
-### Building the Static Site
+#### Building the Static Site
 
 To generate a static HTML version of the documentation (useful for deployment or offline viewing):
 
