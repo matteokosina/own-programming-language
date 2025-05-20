@@ -1,0 +1,4 @@
+Program(1:0)
+ DruckeStmt(1:0)
+ DruckeStmt(2:0)
+ DruckeStmt(3:0)

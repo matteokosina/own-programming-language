@@ -70,6 +70,12 @@ public class AstPrinter extends AstVisitor<String> {
     // Team 6
 
     // Team 7
+    String visitDruckeStmt(AstDruckeStmtNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "DruckeStmt(" + node.locationAsString() + ")\n";
+        exitNode();
+        return temp;
+    }
 
     // Team 8
     @Override
