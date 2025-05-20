@@ -1,6 +1,7 @@
 package de.dhbw.mh.rinne;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -18,6 +19,7 @@ import de.dhbw.mh.rinne.ast.AstReturnStmtNode;
 import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstFunctionDefinitionNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
@@ -90,6 +92,30 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     }
 
     // Team 3
+
+    @Override
+    public AstNode visitFunctionDefinition(RinneParser.FunctionDefinitionContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String functionName = ctx.functionName.getText();
+        HashMap<String, String> args = new HashMap<>();
+
+        for (var parameter : ctx.formalParameters().formalParameter()) {
+            String name = parameter.parameterName.getText();
+            String type = parameter.type().getText();
+
+            args.put(name, type);
+        }
+
+        List<AstStmtNode> body = new ArrayList<>();
+
+        for (var bodyStatement : ctx.statement()) {
+            AstStmtNode statement = (AstStmtNode) visit(bodyStatement);
+            body.add(statement);
+        }
+
+        return new AstFunctionDefinitionNode(codeLoc, functionName, args, body);
+    }
 
     // Team 4
 
