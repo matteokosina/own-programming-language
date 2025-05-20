@@ -3,11 +3,19 @@ package de.dhbw.mh.rinne;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.dhbw.mh.rinne.ast.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import de.dhbw.mh.rinne.antlr.RinneBaseVisitor;
 import de.dhbw.mh.rinne.antlr.RinneParser;
+import de.dhbw.mh.rinne.ast.AstDruckeStmtNode;
+import de.dhbw.mh.rinne.ast.AstExpressionNode;
+import de.dhbw.mh.rinne.ast.AstNode;
+import de.dhbw.mh.rinne.ast.AstProgramNode;
+import de.dhbw.mh.rinne.ast.AstReturnStmtNode;
+import de.dhbw.mh.rinne.ast.AstStmtNode;
+import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
+import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstAssignmentNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
@@ -54,6 +62,13 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     }
 
     // Team 1
+    @Override
+    public AstNode visitAssignment(RinneParser.AssignmentContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+        String name = ctx.variableName.getText();
+        var value = (AstExpressionNode) visit(ctx.expression());
+        return new AstAssignmentNode(codeLoc, name, value);
+    }
 
     // Team 2
 
@@ -74,5 +89,11 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     }
 
     // Team 8
+    @Override
+    public AstNode visitReturnStatement(RinneParser.ReturnStatementContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+        var expr = (AstExpressionNode) visit(ctx.expression());
+        return new AstReturnStmtNode(codeLoc, expr);
+    }
 
 }
