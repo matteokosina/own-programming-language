@@ -72,5 +72,12 @@ public class AstPrinter extends AstVisitor<String> {
     // Team 7
 
     // Team 8
+    @Override
+    String visitReturnStmt(AstReturnStmtNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Return(" + node.locationAsString() + ")\n";
+        exitNode();
+        return temp;
+    }
 
 }
