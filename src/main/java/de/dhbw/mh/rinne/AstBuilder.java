@@ -76,7 +76,7 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     // Team 8
     @Override
     public AstNode visitReturnStatement(RinneParser.ReturnStatementContext ctx) {
-        CodeLocation codeLoc = getCodeLocation(ctx); 
+        CodeLocation codeLoc = getCodeLocation(ctx);
         var expr = (AstExpressionNode) visit(ctx.expression());
         return new AstReturnStmtNode(codeLoc, expr);
     }
