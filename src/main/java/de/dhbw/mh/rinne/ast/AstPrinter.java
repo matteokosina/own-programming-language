@@ -52,6 +52,12 @@ public class AstPrinter extends AstVisitor<String> {
     }
 
     // Team 1
+    String visitAssignment(AstAssignmentNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Assig(" + node.locationAsString() + ")\n";
+        exitNode();
+        return temp;
+    }
 
     // Team 2
 
