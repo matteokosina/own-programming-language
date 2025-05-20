@@ -4,8 +4,12 @@ import de.dhbw.mh.rinne.CodeLocation;
 
 public class AstReturnStmtNode extends AstStmtNode {
 
-    public AstReturnStmtNode(CodeLocation codeLocation) {
+    private final AstExpressionNode value;
+
+    public AstReturnStmtNode(CodeLocation codeLocation, AstExpressionNode value) {
         super(codeLocation);
+        this.value = value;
+        this.children.add(value);
     }
 
     @Override

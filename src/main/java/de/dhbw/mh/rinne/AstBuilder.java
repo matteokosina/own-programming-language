@@ -10,6 +10,7 @@ import de.dhbw.mh.rinne.antlr.RinneParser;
 import de.dhbw.mh.rinne.ast.AstExpressionNode;
 import de.dhbw.mh.rinne.ast.AstNode;
 import de.dhbw.mh.rinne.ast.AstProgramNode;
+import de.dhbw.mh.rinne.ast.AstReturnStmtNode;
 import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
@@ -73,5 +74,11 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     // Team 7
 
     // Team 8
+    @Override
+    public AstNode visitReturnStatement(RinneParser.ReturnStatementContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx); 
+        var expr = (AstExpressionNode) visit(ctx.expression());
+        return new AstReturnStmtNode(codeLoc, expr);
+    }
 
 }
