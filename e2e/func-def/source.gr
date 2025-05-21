@@ -1,3 +1,8 @@
 deklariere Sinan(mit Lehm als Ganzzahl)
     gebe "nix" zurück,
 ;
+
+deklariere Freudi(mit Sieb als Ganzzahl und Sieeb als Wahrheitswert)
+    drucke "Hallo Welt",
+    gebe "ohje" zurück,
+;
