@@ -1,3 +1,4 @@
 wiederhole
-  drucke "DER PRICKELNDE MATE-EISTEE",
+    unbezahlte_werbung als Schnur := "DER PRICKELNDE MATE-EISTEE",
+    drucke unbezahlte_werbung,
 solange(wahr),
