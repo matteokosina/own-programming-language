@@ -13,6 +13,7 @@ import de.dhbw.mh.rinne.ast.AstProgramNode;
 import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstPostCheckLoopNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
@@ -67,6 +68,19 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     // Team 4
 
     // Team 5
+    public AstNode visitDoWhileStatement(RinneParser.DoWhileStatementContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String condition = ctx.condition().getText();
+
+        List<AstStmtNode> body = new ArrayList<>();
+
+        for (var bodyStatement : ctx.statement()) {
+            AstStmtNode statement = (AstStmtNode) visit(bodyStatement);
+            body.add(statement);
+        }
+        return new AstPostCheckLoopNode(codeLoc, condition, body);
+    }
 
     // Team 6
 
