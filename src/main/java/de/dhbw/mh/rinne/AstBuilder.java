@@ -73,11 +73,11 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
     // Team 2
     @Override
-    public AstNode visitFunctionCall(RinneParser.FunctionCallContext ctx) {
+    public AstNode visitFuncCall(RinneParser.FuncCallContext ctx) {
         CodeLocation codeLoc = getCodeLocation(ctx);
-        String func = ctx.funcCall().getText();
+        String func = ctx.functionName.getText();
         List<AstExpressionNode> args = new ArrayList<AstExpressionNode>();
-        ctx.funcCall().actualParameters.forEach(e -> args.add((AstExpressionNode) visit(e)));
+        ctx.actualParameters.forEach(e -> args.add((AstExpressionNode) visit(e)));
 
         return new AstFunctionCallNode(codeLoc, func, args);
     }
