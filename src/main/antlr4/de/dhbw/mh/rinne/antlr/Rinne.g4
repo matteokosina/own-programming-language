@@ -14,11 +14,16 @@ statement
   | doWhileStatement
   | funcCall COMMA
   | returnStatement
+  | druckeStatement
   ;
 
 
 returnStatement
   : GEBE expression ZURÜCK COMMA
+  ;
+
+druckeStatement
+  : DRUCKE expression COMMA
   ;
 
 variableDeclaration

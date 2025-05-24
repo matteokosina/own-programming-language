@@ -7,10 +7,12 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import de.dhbw.mh.rinne.antlr.RinneBaseVisitor;
 import de.dhbw.mh.rinne.antlr.RinneParser;
+import de.dhbw.mh.rinne.ast.AstDruckeStmtNode;
 import de.dhbw.mh.rinne.ast.AstExpressionNode;
 import de.dhbw.mh.rinne.ast.AstIfElseStmtNode;
 import de.dhbw.mh.rinne.ast.AstNode;
 import de.dhbw.mh.rinne.ast.AstProgramNode;
+import de.dhbw.mh.rinne.ast.AstReturnStmtNode;
 import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
@@ -93,7 +95,19 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     // Team 6
 
     // Team 7
+    @Override
+    public AstNode visitDruckeStatement(RinneParser.DruckeStatementContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+        AstExpressionNode expression = (AstExpressionNode) visit(ctx.expression());
+        return new AstDruckeStmtNode(codeLoc, expression);
+    }
 
     // Team 8
+    @Override
+    public AstNode visitReturnStatement(RinneParser.ReturnStatementContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+        var expr = (AstExpressionNode) visit(ctx.expression());
+        return new AstReturnStmtNode(codeLoc, expr);
+    }
 
 }
