@@ -1,24 +1,26 @@
 package de.dhbw.mh.rinne.ast;
 
 import de.dhbw.mh.rinne.CodeLocation;
-import de.dhbw.mh.rinne.antlr.RinneParser.StatementContext;
 
 import java.util.List;
 
 public class AstIfElseStmtNode extends AstStmtNode {
 
-    private AstStmtNode statement;
-    private String condition;
-    private List<AstStmtNode> elseBlock;
+    final AstExpressionNode condition;
+    final List<AstStmtNode> statements;
+    final List<AstStmtNode> elseBlock;
 
-    public AstIfElseStmtNode(CodeLocation codeLocation, AstStmtNode statement, List<AstStmtNode> elseBlock, String condition) {
+    public AstIfElseStmtNode(CodeLocation codeLocation, AstExpressionNode condition, List<AstStmtNode> statements, List<AstStmtNode> elseBlock) {
 
         super(codeLocation);
-        this.statement = statement;
-        this.elseBlock = elseBlock;
         this.condition = condition;
+        this.elseBlock = elseBlock;
         
-        this.children.add(statement);
+        int temp = statements.size() - this.elseBlock.size();
+        this.statements = statements.subList(0, temp);
+        
+        this.children.add(condition);
+        this.children.addAll(this.statements);
         this.children.addAll(elseBlock);
     }
 
