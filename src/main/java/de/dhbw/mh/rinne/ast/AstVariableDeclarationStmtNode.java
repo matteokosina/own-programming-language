@@ -22,4 +22,12 @@ public class AstVariableDeclarationStmtNode extends AstStmtNode {
         return visitor.visitVariableDeclarationStmt(this);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public AstExpressionNode getInitializer() {
+        return initializer;
+    }
+
 }

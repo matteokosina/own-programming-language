@@ -16,4 +16,8 @@ public class AstVariableReferenceNode extends AstExpressionNode {
         return visitor.visitVariableReference(this);
     }
 
+    public String getName() {
+        return name;
+    }
+
 }

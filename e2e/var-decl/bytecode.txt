@@ -1,0 +1,4 @@
+iload <elf>
+istore <n>
+iload <Zeichenkette>
+istore <m>
