@@ -73,4 +73,8 @@ class AstVisitor<T> {
         return visitChildren(node);
     }
 
+    T visitScopedStatements(AstScopedStmtsNode node) {
+        return visitChildren(node);
+    }
+
 }
