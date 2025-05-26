@@ -7,8 +7,10 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import de.dhbw.mh.rinne.antlr.RinneBaseVisitor;
 import de.dhbw.mh.rinne.antlr.RinneParser;
+import de.dhbw.mh.rinne.ast.AstAssignmentNode;
 import de.dhbw.mh.rinne.ast.AstDruckeStmtNode;
 import de.dhbw.mh.rinne.ast.AstExpressionNode;
+import de.dhbw.mh.rinne.ast.AstExpressionStmtNode;
 import de.dhbw.mh.rinne.ast.AstFunctionCallNode;
 import de.dhbw.mh.rinne.ast.AstNode;
 import de.dhbw.mh.rinne.ast.AstProgramNode;
@@ -16,7 +18,6 @@ import de.dhbw.mh.rinne.ast.AstReturnStmtNode;
 import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
-import de.dhbw.mh.rinne.ast.AstAssignmentNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
@@ -38,6 +39,12 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitStatement(RinneParser.StatementContext ctx) {
+        // TODO: Refactor this method to use rule labels for direct access to alternatives
+        // and avoid the current if-else cascade when checking which child is non-null.
+        if (ctx.funcCall() != null) {
+            var functionCallNode = (AstFunctionCallNode) visitFuncCall(ctx.funcCall());
+            return new AstExpressionStmtNode(functionCallNode);
+        }
         return visitChildren(ctx);
     }
 

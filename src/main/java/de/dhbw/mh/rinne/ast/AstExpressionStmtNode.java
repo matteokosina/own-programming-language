@@ -1,11 +1,10 @@
 package de.dhbw.mh.rinne.ast;
 
-import de.dhbw.mh.rinne.CodeLocation;
-
 public class AstExpressionStmtNode extends AstStmtNode {
 
-    public AstExpressionStmtNode(CodeLocation codeLocation) {
-        super(codeLocation);
+    public AstExpressionStmtNode(AstExpressionNode expr) {
+        super(expr.getCodeLocation());
+        this.children.add(expr);
     }
 
     @Override
