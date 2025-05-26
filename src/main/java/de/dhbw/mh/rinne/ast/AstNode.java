@@ -8,7 +8,7 @@ import de.dhbw.mh.rinne.CodeLocation;
 
 public abstract class AstNode {
 
-    private final CodeLocation codeLocation;
+    protected final CodeLocation codeLocation;
     protected LinkedList<AstNode> children = new LinkedList<>();
 
     public AstNode(CodeLocation codeLocation) {
