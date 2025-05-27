@@ -1,7 +1,6 @@
 package de.dhbw.mh.rinne;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -20,6 +19,8 @@ import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
 import de.dhbw.mh.rinne.ast.AstFunctionDefinitionNode;
+import de.dhbw.mh.rinne.ast.AstParameterNode;
+import de.dhbw.mh.rinne.ast.AstParameterListNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
@@ -98,14 +99,8 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
         CodeLocation codeLoc = getCodeLocation(ctx);
 
         String functionName = ctx.functionName.getText();
-        HashMap<String, String> args = new HashMap<>();
 
-        for (var parameter : ctx.formalParameters().formalParameter()) {
-            String name = parameter.parameterName.getText();
-            String type = parameter.type().getText();
-
-            args.put(name, type);
-        }
+        AstParameterListNode parameters = (AstParameterListNode) visit(ctx.formalParameters());
 
         List<AstStmtNode> body = new ArrayList<>();
 
@@ -114,7 +109,30 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
             body.add(statement);
         }
 
-        return new AstFunctionDefinitionNode(codeLoc, functionName, args, body);
+        return new AstFunctionDefinitionNode(codeLoc, functionName, parameters, body);
+    }
+
+    @Override
+    public AstNode visitFormalParameters(RinneParser.FormalParametersContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        List<AstParameterNode> parameters = new ArrayList<>();
+
+        for (var parameter : ctx.formalParameter()) {
+            parameters.add((AstParameterNode) visit(parameter));
+        }
+
+        return new AstParameterListNode(codeLoc, parameters);
+    }
+
+    @Override
+    public AstNode visitFormalParameter(RinneParser.FormalParameterContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String name = ctx.parameterName.getText();
+        String type = ctx.type().getText();
+
+        return new AstParameterNode(codeLoc, name, type);
     }
 
     // Team 4

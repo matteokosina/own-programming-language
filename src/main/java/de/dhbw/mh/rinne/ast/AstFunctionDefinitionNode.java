@@ -7,14 +7,14 @@ import java.util.List;
 
 public class AstFunctionDefinitionNode extends AstStmtNode {
     private final String name;
-    private final HashMap<String, String> args;
+    private final AstParameterListNode parameters;
     private final List<AstStmtNode> body;
 
-    public AstFunctionDefinitionNode(CodeLocation codeLocation, String name, HashMap<String, String> args,
+    public AstFunctionDefinitionNode(CodeLocation codeLocation, String name, AstParameterListNode parameters,
             List<AstStmtNode> body) {
         super(codeLocation);
         this.name = name;
-        this.args = args;
+        this.parameters = parameters;
         this.body = body;
         this.children.addAll(body);
     }
