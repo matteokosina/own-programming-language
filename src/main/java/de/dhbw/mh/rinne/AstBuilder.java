@@ -18,6 +18,9 @@ import de.dhbw.mh.rinne.ast.AstReturnStmtNode;
 import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstFunctionDefinitionNode;
+import de.dhbw.mh.rinne.ast.AstParameterNode;
+import de.dhbw.mh.rinne.ast.AstParameterListNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
@@ -90,6 +93,47 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     }
 
     // Team 3
+
+    @Override
+    public AstNode visitFunctionDefinition(RinneParser.FunctionDefinitionContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String functionName = ctx.functionName.getText();
+
+        AstParameterListNode parameters = (AstParameterListNode) visit(ctx.formalParameters());
+
+        List<AstStmtNode> body = new ArrayList<>();
+
+        for (var bodyStatement : ctx.statement()) {
+            AstStmtNode statement = (AstStmtNode) visit(bodyStatement);
+            body.add(statement);
+        }
+
+        return new AstFunctionDefinitionNode(codeLoc, functionName, parameters, body);
+    }
+
+    @Override
+    public AstNode visitFormalParameters(RinneParser.FormalParametersContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        List<AstParameterNode> parameters = new ArrayList<>();
+
+        for (var parameter : ctx.formalParameter()) {
+            parameters.add((AstParameterNode) visit(parameter));
+        }
+
+        return new AstParameterListNode(codeLoc, parameters);
+    }
+
+    @Override
+    public AstNode visitFormalParameter(RinneParser.FormalParameterContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String name = ctx.parameterName.getText();
+        String type = ctx.type().getText();
+
+        return new AstParameterNode(codeLoc, name, type);
+    }
 
     // Team 4
 
