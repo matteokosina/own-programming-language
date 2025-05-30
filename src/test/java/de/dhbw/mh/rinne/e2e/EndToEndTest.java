@@ -18,13 +18,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import de.dhbw.mh.rinne.AstBuilder;
 import de.dhbw.mh.rinne.antlr.RinneLexer;
 import de.dhbw.mh.rinne.antlr.RinneParser;
+import de.dhbw.mh.rinne.ast.AstNode;
 import de.dhbw.mh.rinne.ast.AstPrinter;
+import de.dhbw.mh.rinne.ast.BytecodeGenerator;
 
 class EndToEndTest {
 
     private static final File TEST_ROOT = new File("e2e");
     private static final String SOURCE_FILENAME = "source.gr";
     private static final String EXPECTED_OUTPUT_FILENAME = "out.txt";
+    private static final String EXPECTED_BYTECODE_FILENAME = "bytecode.txt";
 
     static Stream<String> testCasesProvider() {
         File[] directories = TEST_ROOT.listFiles(File::isDirectory);
@@ -36,7 +39,7 @@ class EndToEndTest {
 
     @ParameterizedTest
     @MethodSource("testCasesProvider")
-    void runE2ETest(String testDirectoryPath) {
+    void verifyAst(String testDirectoryPath) {
         File testDirectory = new File(testDirectoryPath);
         File sourceFile = new File(testDirectory, SOURCE_FILENAME);
         File expectedOutputFile = new File(testDirectory, EXPECTED_OUTPUT_FILENAME);
@@ -50,7 +53,8 @@ class EndToEndTest {
         try {
             String sourceCode = readFile(sourceFile);
             String expectedOutput = readFile(expectedOutputFile);
-            String output = executeCompilerPipeline(sourceCode);
+            var ast = executeCompilerPipeline(sourceCode);
+            String output = ast.accept(new AstPrinter());
 
             assertThat(normalized(output)).isEqualTo(normalized(expectedOutput));
         } catch (IOException e) {
@@ -58,15 +62,37 @@ class EndToEndTest {
         }
     }
 
-    private String executeCompilerPipeline(String sourceCode) {
+    @ParameterizedTest
+    @MethodSource("testCasesProvider")
+    void verifyBytecode(String testDirectoryPath) {
+        File testDirectory = new File(testDirectoryPath);
+        File sourceFile = new File(testDirectory, SOURCE_FILENAME);
+        File expectedBytecodeFile = new File(testDirectory, EXPECTED_BYTECODE_FILENAME);
+
+        assumeTrue(sourceFile.exists(), "Test skipped because '" + SOURCE_FILENAME + "' does not exist.");
+        assumeTrue(expectedBytecodeFile.exists(),
+                "Test skipped because '" + EXPECTED_BYTECODE_FILENAME + "' does not exist.");
+
+        try {
+            String sourceCode = readFile(sourceFile);
+            String expectedBytecode = readFile(expectedBytecodeFile);
+            var ast = executeCompilerPipeline(sourceCode);
+            String bytecode = ast.accept(new BytecodeGenerator());
+
+            assertThat(normalized(bytecode)).isEqualTo(normalized(expectedBytecode));
+        } catch (IOException e) {
+            fail("Error reading files in " + testDirectory.getName() + ": " + e.getMessage());
+        }
+    }
+
+    private AstNode executeCompilerPipeline(String sourceCode) {
         var input = CharStreams.fromString(sourceCode);
         var lexer = new RinneLexer(input);
         var tokens = new CommonTokenStream(lexer);
         var parser = new RinneParser(tokens);
         var parseTree = parser.program();
 
-        var ast = new AstBuilder().visit(parseTree);
-        return ast.accept(new AstPrinter());
+        return new AstBuilder().visit(parseTree);
     }
 
     private static String readFile(File file) throws IOException {

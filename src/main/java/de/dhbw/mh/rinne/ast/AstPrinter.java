@@ -60,8 +60,27 @@ public class AstPrinter extends AstVisitor<String> {
     }
 
     // Team 2
+    @Override
+    String visitFunctionCall(AstFunctionCallNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "FuncCall(" + node.locationAsString() + ")\n";
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    String visitExpressionStmt(AstExpressionStmtNode node) {
+        return visitChildren(node);
+    }
 
     // Team 3
+    @Override
+    String visitFunctionDefinition(AstFunctionDefinitionNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "FunctionDefinition(" + node.locationAsString() + ")\n";
+        exitNode();
+        return temp;
+    }
 
     // Team 4
     @Override
