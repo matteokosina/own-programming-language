@@ -8,4 +8,8 @@ public abstract class AstExpressionNode extends AstNode {
         super(codeLocation);
     }
 
+    public CodeLocation getCodeLocation() {
+        return codeLocation;
+    }
+
 }
