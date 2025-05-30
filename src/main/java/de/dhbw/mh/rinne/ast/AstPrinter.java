@@ -92,6 +92,12 @@ public class AstPrinter extends AstVisitor<String> {
     }
 
     // Team 5
+    String visitPostCheckLoop(AstPostCheckLoopNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "DoWhile(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
 
     // Team 6
 
