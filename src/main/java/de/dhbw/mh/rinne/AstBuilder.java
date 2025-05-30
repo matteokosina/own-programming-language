@@ -10,6 +10,7 @@ import de.dhbw.mh.rinne.antlr.RinneParser;
 import de.dhbw.mh.rinne.ast.AstAssignmentNode;
 import de.dhbw.mh.rinne.ast.AstDruckeStmtNode;
 import de.dhbw.mh.rinne.ast.AstExpressionNode;
+import de.dhbw.mh.rinne.ast.AstIfElseStmtNode;
 import de.dhbw.mh.rinne.ast.AstExpressionStmtNode;
 import de.dhbw.mh.rinne.ast.AstFunctionCallNode;
 import de.dhbw.mh.rinne.ast.AstNode;
@@ -136,6 +137,26 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     }
 
     // Team 4
+    @Override
+    public AstNode visitIfStatement(RinneParser.IfStatementContext ctx){
+        CodeLocation codeLoc = getCodeLocation(ctx);
+        // AstExpressionNode condition = (AstExpressionNode) visit(ctx.condition());   -> TODO: wait for condition implementation
+        AstExpressionNode condition = new AstVariableReferenceNode(codeLoc, "temp");
+        List<AstStmtNode> statements = new ArrayList<>();
+        List<AstStmtNode> elseBlock = new ArrayList<>();
+
+        for (var stmtsCtx : ctx.statement()) {
+            statements.add((AstStmtNode) visit(stmtsCtx));
+        }
+
+        for (var stmtCtx : ctx.elseBlock) {
+            elseBlock.add((AstStmtNode) visit(stmtCtx));
+        }
+
+        AstIfElseStmtNode node = new AstIfElseStmtNode(codeLoc,condition,statements,elseBlock);
+        return node;
+    }
+
 
     // Team 5
 
