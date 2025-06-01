@@ -1,5 +1,8 @@
 package de.dhbw.mh.rinne.ast;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 public class AstPrinter extends AstVisitor<String> {
 
     private static final String INDENTATION_PER_LEVEL = " ";
@@ -20,11 +23,10 @@ public class AstPrinter extends AstVisitor<String> {
 
     @Override
     String visitChildren(AstNode node) {
-        StringBuilder builder = new StringBuilder();
-        for (AstNode child : node.getChildren()) {
-            builder.append(child.accept(this));
-        }
-        return builder.toString();
+        // TODO: Some child nodes may be null due to incomplete AST construction in AstBuilder.
+        // Once all node types are handled and children are always non-null, this check should be removed.
+        return node.getChildren().stream().filter(Objects::nonNull).map(child -> child.accept(this))
+                .collect(Collectors.joining());
     }
 
     @Override
@@ -100,6 +102,12 @@ public class AstPrinter extends AstVisitor<String> {
     }
 
     // Team 6
+    String visitPreCheckLoop(AstPreCheckLoopNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "While(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
 
     // Team 7
     String visitDruckeStmt(AstDruckeStmtNode node) {
@@ -114,6 +122,22 @@ public class AstPrinter extends AstVisitor<String> {
     String visitReturnStmt(AstReturnStmtNode node) {
         enterNode();
         String temp = indentationFor(level) + "Return(" + node.locationAsString() + ")\n";
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    String visitScopedStatements(AstScopedStmtsNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Stmts(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    String visitCast(AstCastNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Cast(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }

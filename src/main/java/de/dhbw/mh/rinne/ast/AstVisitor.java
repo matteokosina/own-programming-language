@@ -1,5 +1,6 @@
 package de.dhbw.mh.rinne.ast;
 
+//TODO: Change all visit methods in the visitor to public visibility to allow external access.
 class AstVisitor<T> {
 
     T visit(AstNode node) {
@@ -74,6 +75,14 @@ class AstVisitor<T> {
     }
 
     T visitVariableReference(AstVariableReferenceNode node) {
+        return visitChildren(node);
+    }
+
+    T visitScopedStatements(AstScopedStmtsNode node) {
+        return visitChildren(node);
+    }
+
+    T visitCast(AstCastNode node) {
         return visitChildren(node);
     }
 
