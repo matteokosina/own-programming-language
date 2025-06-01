@@ -153,9 +153,10 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
     // Team 4
     @Override
-    public AstNode visitIfStatement(RinneParser.IfStatementContext ctx){
+    public AstNode visitIfStatement(RinneParser.IfStatementContext ctx) {
         CodeLocation codeLoc = getCodeLocation(ctx);
-        // AstExpressionNode condition = (AstExpressionNode) visit(ctx.condition());   -> TODO: wait for condition implementation
+        // AstExpressionNode condition = (AstExpressionNode) visit(ctx.condition()); -> TODO: wait for condition
+        // implementation
         AstExpressionNode condition = new AstVariableReferenceNode(codeLoc, "temp");
         List<AstStmtNode> statements = new ArrayList<>();
         List<AstStmtNode> elseBlock = new ArrayList<>();
@@ -168,10 +169,9 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
             elseBlock.add((AstStmtNode) visit(stmtCtx));
         }
 
-        AstIfElseStmtNode node = new AstIfElseStmtNode(codeLoc,condition,statements,elseBlock);
+        AstIfElseStmtNode node = new AstIfElseStmtNode(codeLoc, condition, statements, elseBlock);
         return node;
     }
-
 
     // Team 5
     public AstNode visitDoWhileStatement(RinneParser.DoWhileStatementContext ctx) {
