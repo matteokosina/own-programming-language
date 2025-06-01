@@ -2,10 +2,10 @@ package de.dhbw.mh.rinne.ast;
 
 import de.dhbw.mh.rinne.CodeLocation;
 
-public class AstFunctionDefinitionNode extends AstStmtNode {
+public class AstFunctionDefinitionNode extends AstDeclNode {
 
-    public AstFunctionDefinitionNode(CodeLocation codeLocation) {
-        super(codeLocation);
+    public AstFunctionDefinitionNode(CodeLocation codeLocation, String name) {
+        super(codeLocation, name, null);
     }
 
     @Override

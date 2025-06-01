@@ -2,35 +2,36 @@ package de.dhbw.mh.rinne.semantic;
 
 import java.util.NoSuchElementException;
 
-import de.dhbw.mh.rinne.ErrorLogger;
+import de.dhbw.mh.rinne.BinaryOperation;
 import de.dhbw.mh.rinne.RinneType;
-import de.dhbw.mh.rinne.ast.AstSemanticVisitor;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
 
-public class TypeChecker extends AstSemanticVisitor<RinneType> {
+public class TypeChecker extends BaseTypeChecker {
 
-    public TypeChecker(ErrorLogger logger) {
-        super(logger);
-    }
-
-    public RinneType visitVariableDeclarationStmt(AstVariableDeclarationStmtNode node) {
-        visitChildren(node);
+    public RinneType visitPost(AstVariableDeclarationStmtNode node, RinneType initType) {
         var declType = node.getType();
-        RinneType initType = null;
-        try {
-            initType = node.getInitializer().getType();
-        } catch (NoSuchElementException | NullPointerException ex) {
-        }
-
-        if (initType == null) {
-            return declType;
-        }
-        if (declType == null) {
-            declType = initType;
-        } else if (declType != initType) {
-            reportSemanticError(node,
-                    String.format("incompatible types: '%s' cannot be converted to '%s'\n", initType, declType));
+        TypeCheckResult result = BaseTypeChecker.checkBinaryOperation(declType, BinaryOperation.ASSIGN, initType);
+        switch (result.status()) {
+            case OK:
+                if (declType == null) {
+                    declType = initType;
+                }
+                break;
+            case NEEDS_CAST:
+                var supertype = result.requiredType();
+                if (declType != null && declType != supertype) {
+                    reportSemanticError(node,
+                            String.format("incompatible types: '%s' cannot be converted to '%s'", initType, declType));
+                }
+                if (initType != supertype) {
+                    node.castInitializer(supertype);
+                }
+                break;
+            case INCOMPATIBLE:
+                reportSemanticError(node,
+                        String.format("incompatible types: '%s' cannot be converted to '%s'", initType, declType));
+                break;
         }
         return declType;
     }
@@ -38,7 +39,10 @@ public class TypeChecker extends AstSemanticVisitor<RinneType> {
     public RinneType visitVariableReference(AstVariableReferenceNode node) {
         visitChildren(node);
         try {
-            return node.getType();
+            var varDef = scopes.lookupVariable(node.getName());
+            if (varDef.isPresent()) {
+                return varDef.get().getDeclNode().getType();
+            }
         } catch (NoSuchElementException ex) {
         }
         return null;

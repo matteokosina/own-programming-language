@@ -3,18 +3,13 @@ package de.dhbw.mh.rinne.ast;
 import de.dhbw.mh.rinne.CodeLocation;
 import de.dhbw.mh.rinne.RinneType;
 
-public class AstVariableDeclarationStmtNode extends AstStmtNode {
+public class AstVariableDeclarationStmtNode extends AstDeclNode {
 
-    private final String name;
-    private final RinneType type;
-    private final AstExpressionNode initializer;
-    private boolean isUsed = false;
+    private AstExpressionNode initializer;
 
     public AstVariableDeclarationStmtNode(CodeLocation codeLocation, String name, RinneType type,
             AstExpressionNode initializer) {
-        super(codeLocation);
-        this.name = name;
-        this.type = type;
+        super(codeLocation, name, type);
         this.initializer = initializer;
         this.children.add(initializer);
     }
@@ -32,16 +27,8 @@ public class AstVariableDeclarationStmtNode extends AstStmtNode {
         return initializer;
     }
 
-    public void setUsed() {
-        isUsed = true;
-    }
-
-    public boolean isUsed() {
-        return isUsed;
-    }
-
-    public RinneType getType() {
-        return type;
+    public void castInitializer(RinneType type) {
+        initializer = new AstCastNode(initializer);
     }
 
 }

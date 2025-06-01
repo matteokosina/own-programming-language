@@ -20,12 +20,12 @@ class SymbolTableTest {
     private static final AstVariableDeclarationStmtNode VAR_DECL_NESTED_VAR1 = new AstVariableDeclarationStmtNode(null,
             "var1", null, null);
 
-    private static final AstFunctionDefinitionNode FN_DECL_VAR1 = new AstFunctionDefinitionNode(null);
+    private static final AstFunctionDefinitionNode FN_DECL_VAR1 = new AstFunctionDefinitionNode(null, "var1");
 
     @Test
     @DisplayName("Empty symbol table returns no result")
     void lookupInEmptyTableReturnsEmpty() {
-        ScopeStack scope = new ScopeStack();
+        SymbolTable scope = new SymbolTable();
         scope.pushNewScope();
         assertThat(scope.lookupVariable("var1")).isEmpty();
     }
@@ -33,7 +33,7 @@ class SymbolTableTest {
     @Test
     @DisplayName("Variable can be defined and resolved")
     void defineAndLookupVariable() {
-        ScopeStack scope = new ScopeStack();
+        SymbolTable scope = new SymbolTable();
         scope.pushNewScope();
         scope.defineVariable("var1", VAR_DECL_GLOBAL_VAR1);
 
@@ -46,7 +46,7 @@ class SymbolTableTest {
     @Test
     @DisplayName("Functions and variables can coexist with same name")
     void defineFunctionAndVariableWithSameName() {
-        ScopeStack scope = new ScopeStack();
+        SymbolTable scope = new SymbolTable();
         scope.pushNewScope();
         scope.defineVariable("var1", VAR_DECL_GLOBAL_VAR1);
         scope.defineFunction("var1", FN_DECL_VAR1);
@@ -64,41 +64,41 @@ class SymbolTableTest {
     @Test
     @DisplayName("Variable can be shadowed in nested scope")
     void shadowingInNestedScope() {
-        ScopeStack scope = new ScopeStack();
+        SymbolTable scope = new SymbolTable();
         scope.pushNewScope();
         scope.defineVariable("var1", VAR_DECL_GLOBAL_VAR1);
 
-        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTable.Entry::getDeclNode)
+        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTableEntry::getDeclNode)
                 .isSameAs(VAR_DECL_GLOBAL_VAR1);
 
         scope.pushNewScope();
         scope.defineVariable("var1", VAR_DECL_NESTED_VAR1);
 
-        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTable.Entry::getDeclNode)
+        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTableEntry::getDeclNode)
                 .isSameAs(VAR_DECL_NESTED_VAR1);
 
         scope.exitScope();
 
-        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTable.Entry::getDeclNode)
+        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTableEntry::getDeclNode)
                 .isSameAs(VAR_DECL_GLOBAL_VAR1);
     }
 
     @Test
     @DisplayName("Parent scopes are visible in nested scopes")
     void resolveVariableFromParentScope() {
-        ScopeStack scope = new ScopeStack();
+        SymbolTable scope = new SymbolTable();
         scope.pushNewScope();
         scope.defineVariable("var1", VAR_DECL_GLOBAL_VAR1);
         scope.pushNewScope();
 
-        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTable.Entry::getDeclNode)
+        assertThat(scope.lookupVariable("var1")).get().extracting(SymbolTableEntry::getDeclNode)
                 .isSameAs(VAR_DECL_GLOBAL_VAR1);
     }
 
     @Test
     @DisplayName("Redefining a variable in the same scope throws exception")
     void redefineVariableInSameScopeThrows() {
-        ScopeStack scope = new ScopeStack();
+        SymbolTable scope = new SymbolTable();
         scope.pushNewScope();
         scope.defineVariable("var1", VAR_DECL_GLOBAL_VAR1);
 

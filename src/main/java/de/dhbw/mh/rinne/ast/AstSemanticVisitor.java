@@ -1,33 +1,38 @@
 package de.dhbw.mh.rinne.ast;
 
-import de.dhbw.mh.rinne.ErrorLogger;
-import de.dhbw.mh.rinne.semantic.ScopeStack;
-import de.dhbw.mh.rinne.semantic.SemanticException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Supplier;
 
+import de.dhbw.mh.rinne.RinneErrorListener;
+import de.dhbw.mh.rinne.semantic.Scope;
+import de.dhbw.mh.rinne.semantic.SymbolTable;
+
+//TODO: Move this class to a more appropriate package once the visit methods in AstVisitor are made public.
 public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
 
-    private static final boolean EXCEPTION_BASED = false;
-    private final ErrorLogger logger;
+    private final List<RinneErrorListener> errorListeners;
 
-    protected ScopeStack scopes = new ScopeStack();
+    protected SymbolTable scopes = new SymbolTable();
 
-    protected AstSemanticVisitor(ErrorLogger logger) {
-        this.logger = logger;
+    protected AstSemanticVisitor() {
+        this.errorListeners = new LinkedList<>();
+    }
+
+    public void addErrorListener(RinneErrorListener errorListener) {
+        errorListeners.add(errorListener);
     }
 
     protected void reportSemanticError(AstNode node, String message) {
-        if (EXCEPTION_BASED) {
-            throw new SemanticException(node, message);
-        } else {
-            logger.error(node.locationAsString() + ": " + message);
-        }
+        errorListeners.forEach(listener -> listener.receive(node, node.locationAsString() + ": " + message));
     }
 
-    protected void withNewScope(Runnable block) {
-        scopes.pushNewScope();
+    protected T withScope(Scope scope, Supplier<T> block) {
+        scopes.enterScope(scope);
         try {
-            block.run();
+            return block.get();
         } finally {
+            beforeScopeExit();
             scopes.exitScope();
         }
     }
@@ -37,6 +42,8 @@ public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
     }
 
     public T visitChildren(AstNode node) {
+        // TODO: Some child nodes may be null due to incomplete AST construction in AstBuilder.
+        // Once all node types are handled and children are always non-null, this check should be removed.
         for (AstNode child : node.getChildren()) {
             if (child == null) {
                 continue;
@@ -87,10 +94,7 @@ public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
     }
 
     public T visitProgram(AstProgramNode node) {
-        scopes.enterScope(node.getScope());
-        T temp = visitChildren(node);
-        scopes.exitScope();
-        return temp;
+        return withScope(node.getScope(), () -> visitChildren(node));
     }
 
     public T visitReturnStmt(AstReturnStmtNode node) {
@@ -102,7 +106,11 @@ public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
     }
 
     public T visitVariableDeclarationStmt(AstVariableDeclarationStmtNode node) {
-        return visitChildren(node);
+        T init = null;
+        if (node.getInitializer() != null) {
+            init = node.getInitializer().accept(this);
+        }
+        return visitPost(node, init);
     }
 
     public T visitVariableReference(AstVariableReferenceNode node) {
@@ -114,6 +122,13 @@ public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
         T temp = visitChildren(node);
         scopes.exitScope();
         return temp;
+    }
+
+    public void beforeScopeExit() {
+    }
+
+    public T visitPost(AstVariableDeclarationStmtNode node, T init) {
+        return init;
     }
 
 }
