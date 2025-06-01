@@ -3,7 +3,6 @@ package de.dhbw.mh.rinne.semantic;
 import de.dhbw.mh.rinne.BinaryOperation;
 import de.dhbw.mh.rinne.RinneType;
 import de.dhbw.mh.rinne.UnaryOperation;
-import de.dhbw.mh.rinne.ast.AstSemanticVisitor;
 
 abstract class BaseTypeChecker extends AstSemanticVisitor<RinneType> {
 

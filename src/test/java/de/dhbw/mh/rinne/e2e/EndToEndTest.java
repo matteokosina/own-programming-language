@@ -21,7 +21,7 @@ import de.dhbw.mh.rinne.antlr.RinneLexer;
 import de.dhbw.mh.rinne.antlr.RinneParser;
 import de.dhbw.mh.rinne.ast.AstNode;
 import de.dhbw.mh.rinne.ast.AstPrinter;
-import de.dhbw.mh.rinne.ast.BytecodeGenerator;
+import de.dhbw.mh.rinne.codegen.BytecodeGenerator;
 import de.dhbw.mh.rinne.semantic.TypeChecker;
 import de.dhbw.mh.rinne.semantic.UsageChecker;
 import de.dhbw.mh.rinne.semantic.VariableResolver;

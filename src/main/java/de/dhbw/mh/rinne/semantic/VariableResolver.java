@@ -1,6 +1,5 @@
 package de.dhbw.mh.rinne.semantic;
 
-import de.dhbw.mh.rinne.ast.AstSemanticVisitor;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
 

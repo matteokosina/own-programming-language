@@ -1,88 +1,87 @@
 package de.dhbw.mh.rinne.ast;
 
-//TODO: Change all visit methods in the visitor to public visibility to allow external access.
-class AstVisitor<T> {
+public class AstVisitor<T> {
 
-    T visit(AstNode node) {
+    public T visit(AstNode node) {
         return node.accept(this);
     }
 
-    T visitChildren(AstNode node) {
+    public T visitChildren(AstNode node) {
         for (AstNode child : node.getChildren()) {
             child.accept(this);
         }
         return null;
     }
 
-    T visitAssignment(AstAssignmentNode node) {
+    public T visitAssignment(AstAssignmentNode node) {
         return visitChildren(node);
     }
 
-    T visitDruckeStmt(AstDruckeStmtNode node) {
+    public T visitDruckeStmt(AstDruckeStmtNode node) {
         return visitChildren(node);
     }
 
-    T visitExpression(AstExpressionNode node) {
+    public T visitExpression(AstExpressionNode node) {
         return visitChildren(node);
     }
 
-    T visitExpressionStmt(AstExpressionStmtNode node) {
+    public T visitExpressionStmt(AstExpressionStmtNode node) {
         return visitChildren(node);
     }
 
-    T visitFunctionCall(AstFunctionCallNode node) {
+    public T visitFunctionCall(AstFunctionCallNode node) {
         return visitChildren(node);
     }
 
-    T visitFunctionDefinition(AstFunctionDefinitionNode node) {
+    public T visitFunctionDefinition(AstFunctionDefinitionNode node) {
         return visitChildren(node);
     }
 
-    T visitParameterList(AstParameterListNode node) {
+    public T visitParameterList(AstParameterListNode node) {
         return visitChildren(node);
     }
 
-    T visitOhjeStmt(AstOhjeStmtNode node) {
+    public T visitOhjeStmt(AstOhjeStmtNode node) {
         return visitChildren(node);
     }
 
-    T visitParameter(AstParameterNode node) {
+    public T visitParameter(AstParameterNode node) {
         return visitChildren(node);
     }
 
-    T visitPostCheckLoop(AstPostCheckLoopNode node) {
+    public T visitPostCheckLoop(AstPostCheckLoopNode node) {
         return visitChildren(node);
     }
 
-    T visitPreCheckLoop(AstPreCheckLoopNode node) {
+    public T visitPreCheckLoop(AstPreCheckLoopNode node) {
         return visitChildren(node);
     }
 
-    T visitProgram(AstProgramNode node) {
+    public T visitProgram(AstProgramNode node) {
         return visitChildren(node);
     }
 
-    T visitReturnStmt(AstReturnStmtNode node) {
+    public T visitReturnStmt(AstReturnStmtNode node) {
         return visitChildren(node);
     }
 
-    T visitIfElseStmt(AstIfElseStmtNode node) {
+    public T visitIfElseStmt(AstIfElseStmtNode node) {
         return visitChildren(node);
     }
 
-    T visitVariableDeclarationStmt(AstVariableDeclarationStmtNode node) {
+    public T visitVariableDeclarationStmt(AstVariableDeclarationStmtNode node) {
         return visitChildren(node);
     }
 
-    T visitVariableReference(AstVariableReferenceNode node) {
+    public T visitVariableReference(AstVariableReferenceNode node) {
         return visitChildren(node);
     }
 
-    T visitScopedStatements(AstScopedStmtsNode node) {
+    public T visitScopedStatements(AstScopedStmtsNode node) {
         return visitChildren(node);
     }
 
-    T visitCast(AstCastNode node) {
+    public T visitCast(AstCastNode node) {
         return visitChildren(node);
     }
 

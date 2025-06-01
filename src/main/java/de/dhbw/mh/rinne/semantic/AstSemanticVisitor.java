@@ -1,14 +1,29 @@
-package de.dhbw.mh.rinne.ast;
+package de.dhbw.mh.rinne.semantic;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
 import de.dhbw.mh.rinne.RinneErrorListener;
-import de.dhbw.mh.rinne.semantic.Scope;
-import de.dhbw.mh.rinne.semantic.SymbolTable;
+import de.dhbw.mh.rinne.ast.AstAssignmentNode;
+import de.dhbw.mh.rinne.ast.AstDruckeStmtNode;
+import de.dhbw.mh.rinne.ast.AstExpressionNode;
+import de.dhbw.mh.rinne.ast.AstExpressionStmtNode;
+import de.dhbw.mh.rinne.ast.AstFunctionCallNode;
+import de.dhbw.mh.rinne.ast.AstFunctionDefinitionNode;
+import de.dhbw.mh.rinne.ast.AstIfElseStmtNode;
+import de.dhbw.mh.rinne.ast.AstNode;
+import de.dhbw.mh.rinne.ast.AstOhjeStmtNode;
+import de.dhbw.mh.rinne.ast.AstParameterNode;
+import de.dhbw.mh.rinne.ast.AstPostCheckLoopNode;
+import de.dhbw.mh.rinne.ast.AstPreCheckLoopNode;
+import de.dhbw.mh.rinne.ast.AstProgramNode;
+import de.dhbw.mh.rinne.ast.AstReturnStmtNode;
+import de.dhbw.mh.rinne.ast.AstScopedStmtsNode;
+import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
+import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstVisitor;
 
-//TODO: Move this class to a more appropriate package once the visit methods in AstVisitor are made public.
 public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
 
     private final List<RinneErrorListener> errorListeners;

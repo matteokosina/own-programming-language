@@ -1,9 +1,13 @@
-package de.dhbw.mh.rinne.ast;
+package de.dhbw.mh.rinne.codegen;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-//TODO: Move this class to a more appropriate package once the visit methods in AstVisitor are made public.
+import de.dhbw.mh.rinne.ast.AstProgramNode;
+import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
+import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstVisitor;
+
 public class BytecodeGenerator extends AstVisitor<String> {
 
     public void enterNode() {

@@ -1,7 +1,5 @@
 package de.dhbw.mh.rinne.semantic;
 
-import de.dhbw.mh.rinne.ast.AstSemanticVisitor;
-
 public class UsageChecker extends AstSemanticVisitor<Void> {
 
     public void beforeScopeExit() {
