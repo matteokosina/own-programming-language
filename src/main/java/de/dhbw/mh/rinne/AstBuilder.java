@@ -10,6 +10,7 @@ import de.dhbw.mh.rinne.antlr.RinneParser;
 import de.dhbw.mh.rinne.ast.AstAssignmentNode;
 import de.dhbw.mh.rinne.ast.AstDruckeStmtNode;
 import de.dhbw.mh.rinne.ast.AstExpressionNode;
+import de.dhbw.mh.rinne.ast.AstIfElseStmtNode;
 import de.dhbw.mh.rinne.ast.AstExpressionStmtNode;
 import de.dhbw.mh.rinne.ast.AstFunctionCallNode;
 import de.dhbw.mh.rinne.ast.AstNode;
@@ -20,6 +21,10 @@ import de.dhbw.mh.rinne.ast.AstScopedStmtsNode;
 import de.dhbw.mh.rinne.ast.AstStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstPostCheckLoopNode;
+import de.dhbw.mh.rinne.ast.AstFunctionDefinitionNode;
+import de.dhbw.mh.rinne.ast.AstParameterNode;
+import de.dhbw.mh.rinne.ast.AstParameterListNode;
 
 public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
@@ -105,9 +110,83 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
 
     // Team 3
 
+    @Override
+    public AstNode visitFunctionDefinition(RinneParser.FunctionDefinitionContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String functionName = ctx.functionName.getText();
+
+        AstParameterListNode parameters = (AstParameterListNode) visit(ctx.formalParameters());
+
+        List<AstStmtNode> body = new ArrayList<>();
+
+        for (var bodyStatement : ctx.statement()) {
+            AstStmtNode statement = (AstStmtNode) visit(bodyStatement);
+            body.add(statement);
+        }
+
+        return new AstFunctionDefinitionNode(codeLoc, functionName, parameters, body);
+    }
+
+    @Override
+    public AstNode visitFormalParameters(RinneParser.FormalParametersContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        List<AstParameterNode> parameters = new ArrayList<>();
+
+        for (var parameter : ctx.formalParameter()) {
+            parameters.add((AstParameterNode) visit(parameter));
+        }
+
+        return new AstParameterListNode(codeLoc, parameters);
+    }
+
+    @Override
+    public AstNode visitFormalParameter(RinneParser.FormalParameterContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String name = ctx.parameterName.getText();
+        String type = ctx.type().getText();
+
+        return new AstParameterNode(codeLoc, name, type);
+    }
+
     // Team 4
+    @Override
+    public AstNode visitIfStatement(RinneParser.IfStatementContext ctx){
+        CodeLocation codeLoc = getCodeLocation(ctx);
+        // AstExpressionNode condition = (AstExpressionNode) visit(ctx.condition());   -> TODO: wait for condition implementation
+        AstExpressionNode condition = new AstVariableReferenceNode(codeLoc, "temp");
+        List<AstStmtNode> statements = new ArrayList<>();
+        List<AstStmtNode> elseBlock = new ArrayList<>();
+
+        for (var stmtsCtx : ctx.statement()) {
+            statements.add((AstStmtNode) visit(stmtsCtx));
+        }
+
+        for (var stmtCtx : ctx.elseBlock) {
+            elseBlock.add((AstStmtNode) visit(stmtCtx));
+        }
+
+        AstIfElseStmtNode node = new AstIfElseStmtNode(codeLoc,condition,statements,elseBlock);
+        return node;
+    }
+
 
     // Team 5
+    public AstNode visitDoWhileStatement(RinneParser.DoWhileStatementContext ctx) {
+        CodeLocation codeLoc = getCodeLocation(ctx);
+
+        String condition = ctx.condition().getText();
+
+        List<AstStmtNode> body = new ArrayList<>();
+
+        for (var bodyStatement : ctx.statement()) {
+            AstStmtNode statement = (AstStmtNode) visit(bodyStatement);
+            body.add(statement);
+        }
+        return new AstPostCheckLoopNode(codeLoc, condition, body);
+    }
 
     // Team 6
     public AstNode visitWhileStatement(RinneParser.WhileStatementContext ctx) {

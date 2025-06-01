@@ -38,6 +38,10 @@ class AstVisitor<T> {
         return visitChildren(node);
     }
 
+    T visitParameterList(AstParameterListNode node) {
+        return visitChildren(node);
+    }
+
     T visitOhjeStmt(AstOhjeStmtNode node) {
         return visitChildren(node);
     }
