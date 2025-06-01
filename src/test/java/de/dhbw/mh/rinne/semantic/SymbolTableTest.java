@@ -3,6 +3,8 @@ package de.dhbw.mh.rinne.semantic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.LinkedList;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +22,8 @@ class SymbolTableTest {
     private static final AstVariableDeclarationStmtNode VAR_DECL_NESTED_VAR1 = new AstVariableDeclarationStmtNode(null,
             "var1", null, null);
 
-    private static final AstFunctionDefinitionNode FN_DECL_VAR1 = new AstFunctionDefinitionNode(null, "var1");
+    private static final AstFunctionDefinitionNode FN_DECL_VAR1 = new AstFunctionDefinitionNode(null, "var1", null,
+            new LinkedList<>());
 
     @Test
     @DisplayName("Empty symbol table returns no result")

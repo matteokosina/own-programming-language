@@ -1,12 +1,10 @@
 package de.dhbw.mh.rinne.ast;
 
-import java.util.HashMap;
 import java.util.List;
 
 import de.dhbw.mh.rinne.CodeLocation;
 
 public class AstFunctionDefinitionNode extends AstDeclNode {
-    private final String name;
     private final AstParameterListNode parameters;
     private final List<AstStmtNode> body;
 
