@@ -30,7 +30,7 @@ class EndToEndTest {
 
     private static final File TEST_ROOT = new File("e2e");
     private static final String SOURCE_FILENAME = "source.gr";
-    private static final String EXPECTED_OUTPUT_FILENAME = "out.txt";
+    private static final String EXPECTED_AST_FILENAME = "ast.txt";
     private static final String EXPECTED_BYTECODE_FILENAME = "bytecode.txt";
     private static final String EXPECTED_ERRORS_FILENAME = "errors.txt";
 
@@ -47,21 +47,21 @@ class EndToEndTest {
     void verifyAst(String testDirectoryPath) {
         File testDirectory = new File(testDirectoryPath);
         File sourceFile = new File(testDirectory, SOURCE_FILENAME);
-        File expectedOutputFile = new File(testDirectory, EXPECTED_OUTPUT_FILENAME);
+        File expectedAstFile = new File(testDirectory, EXPECTED_AST_FILENAME);
 
         assumeTrue(sourceFile.exists(), "Test skipped because '" + SOURCE_FILENAME + "' does not exist.");
 
-        if (!expectedOutputFile.exists()) {
-            fail("Missing '" + EXPECTED_OUTPUT_FILENAME + "' in directory: " + testDirectory.getName());
+        if (!expectedAstFile.exists()) {
+            fail("Missing '" + EXPECTED_AST_FILENAME + "' in directory: " + testDirectory.getName());
         }
 
         try {
             String sourceCode = readFile(sourceFile);
-            String expectedOutput = readFile(expectedOutputFile);
+            String expectedAst = readFile(expectedAstFile);
             var ast = executeCompilerPipeline(sourceCode);
-            String output = ast.accept(new AstPrinter());
+            String actualAst = ast.accept(new AstPrinter());
 
-            assertThat(normalized(output)).isEqualTo(normalized(expectedOutput));
+            assertThat(normalized(actualAst)).isEqualTo(normalized(expectedAst));
         } catch (IOException e) {
             fail("Error reading files in " + testDirectory.getName() + ": " + e.getMessage());
         }
