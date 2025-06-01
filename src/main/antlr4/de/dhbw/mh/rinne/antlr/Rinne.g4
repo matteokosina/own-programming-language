@@ -121,7 +121,7 @@ MINUS : '-' ;
 LPAREN     : '(' ;
 RPAREN     : ')' ;
 COMMA      : ',' ;
-PERIOD     : ';' ;
+PERIOD     : '.' ;
 
 ALS        : 'als' ;
 ANSONSTEN  : 'ansonsten' ;
