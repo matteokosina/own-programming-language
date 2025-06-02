@@ -18,8 +18,7 @@ public class BytecodeGenerator extends AstVisitor<String> {
     @Override
     public String visitProgram(AstProgramNode node) {
         enterNode();
-        String bytecode = node.getChildren().stream()
-                .map(child -> child.accept(this)).collect(Collectors.joining());
+        String bytecode = node.getChildren().stream().map(child -> child.accept(this)).collect(Collectors.joining());
         exitNode();
         return bytecode;
     }

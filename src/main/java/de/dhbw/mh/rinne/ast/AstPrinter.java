@@ -22,8 +22,7 @@ public class AstPrinter extends AstVisitor<String> {
 
     @Override
     public String visitChildren(AstNode node) {
-        return node.getChildren().stream()
-                .map(child -> child.accept(this)).collect(Collectors.joining());
+        return node.getChildren().stream().map(child -> child.accept(this)).collect(Collectors.joining());
     }
 
     @Override
