@@ -11,7 +11,9 @@ public class AstVariableDeclarationStmtNode extends AstDeclNode {
             AstExpressionNode initializer) {
         super(codeLocation, name, type);
         this.initializer = initializer;
-        this.children.add(initializer);
+        if (initializer != null) {
+            this.children.add(initializer);
+        }
     }
 
     @Override

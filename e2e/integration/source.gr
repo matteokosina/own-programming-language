@@ -1,0 +1,8 @@
+a := 42,
+b := wahr,
+wenn(a < 0)
+  drucke "negativ",
+  wenn(b && (a == 0))
+    drucke "irgendwas",
+  .
+.

@@ -1,6 +1,5 @@
 package de.dhbw.mh.rinne.codegen;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import de.dhbw.mh.rinne.ast.AstProgramNode;
@@ -18,11 +17,9 @@ public class BytecodeGenerator extends AstVisitor<String> {
 
     @Override
     public String visitProgram(AstProgramNode node) {
-        // TODO: Some child nodes may be null due to incomplete AST construction in AstBuilder.
-        // Once all node types are handled and children are always non-null, this check should be removed.
         enterNode();
-        String bytecode = node.getChildren().stream().filter(Objects::nonNull).map(child -> child.accept(this))
-                .collect(Collectors.joining());
+        String bytecode = node.getChildren().stream()
+                .map(child -> child.accept(this)).collect(Collectors.joining());
         exitNode();
         return bytecode;
     }

@@ -85,4 +85,16 @@ public class AstVisitor<T> {
         return visitChildren(node);
     }
 
+    public T visitUnaryExpression(AstUnaryExpressionNode node) {
+        return visitChildren(node);
+    }
+
+    public T visitBinaryExpression(AstBinaryExpressionNode node) {
+        return visitChildren(node);
+    }
+
+    public T visitLiteral(AstLiteralNode node) {
+        return visitChildren(node);
+    }
+
 }

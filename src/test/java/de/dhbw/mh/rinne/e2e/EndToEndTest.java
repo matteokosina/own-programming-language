@@ -146,8 +146,10 @@ class EndToEndTest {
         parser.removeErrorListeners();
         parser.addErrorListener(parserErrors);
         var parseTree = parser.program();
+        var astBuilder = new AstBuilder();
+        astBuilder.addErrorListener(parserErrors);
 
-        return new AstBuilder().visit(parseTree);
+        return astBuilder.visit(parseTree);
     }
 
     private static String readFile(File file) throws IOException {

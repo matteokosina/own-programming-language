@@ -1,4 +1,4 @@
-parser error at 5:6: mismatched input '=' expecting {'==', '!=', '&&', '||', ')'}
+parser error at 5:6: mismatched input '=' expecting {'<', '<=', '>', '>=', '==', '!=', '&&', '||', '*', '/', '%', '+', '-', ')'}
 parser error at 6:17: extraneous input '.' expecting {<EOF>, 'bitte', 'deklariere', 'drucke', 'gebe', 'wenn', 'wiederhole', 'w\u00E4hrend', IDENTIFIER}
-semantic error at 1:0: cannot find symbol 'temp'
-semantic error at 5:0: cannot find symbol 'temp'
+semantic error at 1:5: cannot find symbol 'x'
+semantic error at 5:5: cannot find symbol 'x'

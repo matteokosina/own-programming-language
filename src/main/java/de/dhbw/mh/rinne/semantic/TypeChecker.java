@@ -4,11 +4,13 @@ import java.util.NoSuchElementException;
 
 import de.dhbw.mh.rinne.BinaryOperation;
 import de.dhbw.mh.rinne.RinneType;
+import de.dhbw.mh.rinne.ast.AstLiteralNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
 
 public class TypeChecker extends BaseTypeChecker {
 
+    @Override
     public RinneType visitPost(AstVariableDeclarationStmtNode node, RinneType initType) {
         var declType = node.getType();
         TypeCheckResult result = BaseTypeChecker.checkBinaryOperation(declType, BinaryOperation.ASSIGN, initType);
@@ -36,6 +38,7 @@ public class TypeChecker extends BaseTypeChecker {
         return declType;
     }
 
+    @Override
     public RinneType visitVariableReference(AstVariableReferenceNode node) {
         visitChildren(node);
         try {
@@ -46,6 +49,11 @@ public class TypeChecker extends BaseTypeChecker {
         } catch (NoSuchElementException ex) {
         }
         return null;
+    }
+
+    @Override
+    public RinneType visitLiteral(AstLiteralNode node) {
+        return node.getType();
     }
 
 }

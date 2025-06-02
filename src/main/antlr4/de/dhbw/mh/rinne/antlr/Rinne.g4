@@ -19,32 +19,32 @@ statement
 
 
 returnStatement
-  : GEBE expression ZURÜCK COMMA
+  : GEBE conditionalExpression ZURÜCK COMMA
   ;
 
 druckeStatement
-  : DRUCKE expression COMMA
+  : DRUCKE conditionalExpression COMMA
   ;
 
 variableDeclaration
-  : variableName=IDENTIFIER ALS type (ODER SO COMMA | INIT initialValue=expression COMMA)  # typedVariableDeclaration
-  | variableName=IDENTIFIER INIT initialValue=expression COMMA                             # untypedVariableDeclaration
+  : variableName=IDENTIFIER ALS type (ODER SO COMMA | INIT initialValue=conditionalExpression COMMA)  # typedVariableDeclaration
+  | variableName=IDENTIFIER INIT initialValue=conditionalExpression COMMA                             # untypedVariableDeclaration
   ;
 
 assignment
-  : variableName=IDENTIFIER ASSIGN expression COMMA
+  : variableName=IDENTIFIER ASSIGN conditionalExpression COMMA
   ;
 
 ifStatement
-  : WENN LPAREN condition RPAREN (statement)* ( ANSONSTEN (elseBlock+=statement)* )? PERIOD
+  : WENN LPAREN conditionalExpression RPAREN (statement)* ( ANSONSTEN (elseBlock+=statement)* )? PERIOD
   ;
 
 whileStatement
-  : WÄHREND LPAREN condition RPAREN (statement)* PERIOD
+  : WÄHREND LPAREN conditionalExpression RPAREN (statement)* PERIOD
   ;
 
 doWhileStatement
-  : WIEDERHOLE (statement)* SOLANGE LPAREN condition RPAREN COMMA
+  : WIEDERHOLE (statement)* SOLANGE LPAREN conditionalExpression RPAREN COMMA
   ;
 
 functionDefinition
@@ -62,28 +62,53 @@ formalParameter
 
 
 funcCall
-  : BITTE functionName=IDENTIFIER (MIT (actualParameters+=expression)+)?
+  : BITTE functionName=IDENTIFIER (MIT (actualParameters+=conditionalExpression)+)?
   ;
 
-expression
+conditionalExpression
+  : rhs=conditionalAndExpression
+  | lhs=conditionalExpression operator=LOR rhs=conditionalAndExpression
+  ;
+
+conditionalAndExpression
+  : rhs=equalityExpression
+  | lhs=conditionalAndExpression operator=LAND rhs=equalityExpression
+  ;
+
+equalityExpression
+  : rhs=relationalExpression
+  | lhs=equalityExpression operator=(EQ|NEQ) rhs=relationalExpression
+  ;
+
+relationalExpression
+  : rhs=additiveExpression
+  | lhs=relationalExpression operator=(LT|LE|GT|GE) rhs=additiveExpression
+  ;
+
+additiveExpression
+  : rhs=multiplicativeExpression
+  | lhs=additiveExpression operator=(PLUS|MINUS) rhs=multiplicativeExpression
+  ;
+
+multiplicativeExpression
+  : rhs=unaryExpression
+  | lhs=multiplicativeExpression operator=(STAR|DIV|MOD) rhs=unaryExpression
+  ;
+
+unaryExpression
+  : operator=(PLUS|MINUS|NOT) expr=primary
+  | expr=primary
+  ;
+
+primary
   : funcCall                                                 # functionCall
-  | PLUS expression                                          # unaryExpression
-  | lhs=expression operator=(STAR|DIV|MOD) rhs=expression    # multiplicativeExpression
-  | lhs=expression operator=(PLUS|MINUS) rhs=expression      # additiveExpression
   | variableName=IDENTIFIER                                  # variableReference
-  | lit=(LONG_LITERAL|DOUBLE_LITERAL|STRING_LITERAL)         # literalExpression
-  | LPAREN expression RPAREN                                 # parenthesizedExpression
-  ;
-
-condition
-  : lhs=expression operator=(LT|LE|GT|GE) rhs=expression
-  | leftCond=condition operator=(EQ|NEQ) rightCond=condition
-  | leftCond=condition operator=LAND rightCond=condition
-  | leftCond=condition operator=LOR rightCond=condition
-  | NOT condition
-  | IDENTIFIER
-  | WAHR
-  | FALSCH
+  | literal=LONG_LITERAL                                     # longLiteral
+  | literal=DOUBLE_LITERAL                                   # doubleLiteral
+  | literal=STRING_LITERAL                                   # stringLiteral
+  | LPAREN conditionalExpression RPAREN                      # parenthesizedExpression
+  | WAHR                                                     # booleanTrue
+  | FALSCH                                                   # booleanFalse
   ;
 
 type

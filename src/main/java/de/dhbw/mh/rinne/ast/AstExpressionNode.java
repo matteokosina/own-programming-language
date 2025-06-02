@@ -5,7 +5,7 @@ import de.dhbw.mh.rinne.RinneType;
 
 public abstract class AstExpressionNode extends AstNode {
 
-    private RinneType type;
+    protected RinneType type;
 
     public AstExpressionNode(CodeLocation codeLocation) {
         super(codeLocation);
