@@ -1,6 +1,6 @@
-iload <elf>
-istore <n>
-iload <Zeichenkette>
-istore <m>
-iload <n>
-istore <x>
+iload 0
+istore 1
+iload -2147483648
+istore 3
+iload 1
+istore 4
