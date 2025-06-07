@@ -44,7 +44,7 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitVariableReference(AstVariableReferenceNode node) {
         enterNode();
-        String temp = indentationFor(level) + "VarRef(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "VarRef(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -61,7 +61,7 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitFunctionCall(AstFunctionCallNode node) {
         enterNode();
-        String temp = indentationFor(level) + "FuncCall(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "FuncCall(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -75,7 +75,8 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitFunctionDefinition(AstFunctionDefinitionNode node) {
         enterNode();
-        String temp = indentationFor(level) + "FunctionDefinition(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "FunctionDefinition(" + node.locationAsString() + ")\n"
+                + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -108,7 +109,7 @@ public class AstPrinter extends AstVisitor<String> {
     // Team 7
     public String visitDruckeStmt(AstDruckeStmtNode node) {
         enterNode();
-        String temp = indentationFor(level) + "DruckeStmt(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "DruckeStmt(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -117,7 +118,7 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitReturnStmt(AstReturnStmtNode node) {
         enterNode();
-        String temp = indentationFor(level) + "Return(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "Return(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -142,6 +143,27 @@ public class AstPrinter extends AstVisitor<String> {
     public String visitBinaryExpression(AstBinaryExpressionNode node) {
         enterNode();
         String temp = indentationFor(level) + "BinOp(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    public String visitLiteral(AstLiteralNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Literal(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    public String visitParameterList(AstParameterListNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    public String visitParameter(AstParameterNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Param(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
