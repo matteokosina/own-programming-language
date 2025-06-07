@@ -1,5 +1,5 @@
-2:39: cannot find symbol 'Zeichenkette'
-3:0: 'm' already declared at 2:23
-2:23: 'm' is never used
-4:0: 'x' is never used
-2:0: incompatible types: 'Fließzahl' cannot be converted to 'Ganzzahl'
+semantic error at 2:39: cannot find symbol 'Zeichenkette'
+semantic error at 3:0: 'm' already declared at 2:23
+semantic error at 2:23: 'm' is never used
+semantic error at 4:0: 'x' is never used
+semantic error at 2:0: incompatible types: 'Fließzahl' cannot be converted to 'Ganzzahl'

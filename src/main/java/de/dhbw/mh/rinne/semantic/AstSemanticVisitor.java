@@ -57,12 +57,7 @@ public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
     }
 
     public T visitChildren(AstNode node) {
-        // TODO: Some child nodes may be null due to incomplete AST construction in AstBuilder.
-        // Once all node types are handled and children are always non-null, this check should be removed.
         for (AstNode child : node.getChildren()) {
-            if (child == null) {
-                continue;
-            }
             child.accept(this);
         }
         return null;

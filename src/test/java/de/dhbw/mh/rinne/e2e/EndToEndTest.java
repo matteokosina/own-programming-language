@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.CharStreams;
@@ -57,9 +59,10 @@ class EndToEndTest {
         }
 
         try {
+            LoggingErrorListener dummyListener = new LoggingErrorListener();
             String sourceCode = readFile(sourceFile);
             String expectedAst = readFile(expectedAstFile);
-            var ast = executeCompilerPipeline(sourceCode);
+            var ast = executeCompilerPipeline(sourceCode, dummyListener, dummyListener);
             String actualAst = ast.accept(new AstPrinter());
 
             assertThat(normalized(actualAst)).isEqualTo(normalized(expectedAst));
@@ -80,9 +83,10 @@ class EndToEndTest {
                 "Test skipped because '" + EXPECTED_BYTECODE_FILENAME + "' does not exist.");
 
         try {
+            LoggingErrorListener dummyListener = new LoggingErrorListener();
             String sourceCode = readFile(sourceFile);
             String expectedBytecode = readFile(expectedBytecodeFile);
-            var ast = executeCompilerPipeline(sourceCode);
+            var ast = executeCompilerPipeline(sourceCode, dummyListener, dummyListener);
             ast.accept(new VariableResolver());
             ast.accept(new SimpleVariableAllocator());
             String bytecode = ast.accept(new BytecodeGenerator());
@@ -105,36 +109,50 @@ class EndToEndTest {
                 "Test skipped because '" + EXPECTED_ERRORS_FILENAME + "' does not exist.");
 
         try {
+            LoggingErrorListener lexerErrors = new LoggingErrorListener("lexer error at ");
+            LoggingErrorListener parserErrors = new LoggingErrorListener("parser error at ");
+
             String sourceCode = readFile(sourceFile);
             String expectedErrors = readFile(expectedErrorsFile);
-            var ast = executeCompilerPipeline(sourceCode);
+            var ast = executeCompilerPipeline(sourceCode, lexerErrors, parserErrors);
 
-            LoggingErrorListener errorListener = new LoggingErrorListener();
+            LoggingErrorListener semanticErrors = new LoggingErrorListener("semantic error at ");
             VariableResolver variableResolver = new VariableResolver();
             UsageChecker usageChecker = new UsageChecker();
             TypeChecker typeChecker = new TypeChecker();
-            variableResolver.addErrorListener(errorListener);
-            usageChecker.addErrorListener(errorListener);
-            typeChecker.addErrorListener(errorListener);
+            variableResolver.addErrorListener(semanticErrors);
+            usageChecker.addErrorListener(semanticErrors);
+            typeChecker.addErrorListener(semanticErrors);
             ast.accept(variableResolver);
             ast.accept(usageChecker);
             ast.accept(typeChecker);
 
-            String actualErrors = String.join("\n", errorListener.messages());
+            List<String> allErrors = Stream
+                    .of(lexerErrors.messages(), parserErrors.messages(), semanticErrors.messages())
+                    .flatMap(List::stream).collect(Collectors.toList());
+
+            String actualErrors = String.join("\n", allErrors);
             assertThat(normalized(actualErrors)).isEqualTo(normalized(expectedErrors));
         } catch (IOException e) {
             fail("Error reading files in " + testDirectory.getName() + ": " + e.getMessage());
         }
     }
 
-    private AstNode executeCompilerPipeline(String sourceCode) {
+    private AstNode executeCompilerPipeline(String sourceCode, LoggingErrorListener lexerErrors,
+            LoggingErrorListener parserErrors) {
         var input = CharStreams.fromString(sourceCode);
         var lexer = new RinneLexer(input);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(lexerErrors);
         var tokens = new CommonTokenStream(lexer);
         var parser = new RinneParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(parserErrors);
         var parseTree = parser.program();
+        var astBuilder = new AstBuilder();
+        astBuilder.addErrorListener(parserErrors);
 
-        return new AstBuilder().visit(parseTree);
+        return astBuilder.visit(parseTree);
     }
 
     private static String readFile(File file) throws IOException {

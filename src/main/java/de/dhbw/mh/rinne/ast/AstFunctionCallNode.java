@@ -12,6 +12,7 @@ public class AstFunctionCallNode extends AstExpressionNode {
         super(codeLocation);
         this.functionName = functionName;
         this.arguments = arguments;
+        this.children.addAll(arguments);
     }
 
     @Override

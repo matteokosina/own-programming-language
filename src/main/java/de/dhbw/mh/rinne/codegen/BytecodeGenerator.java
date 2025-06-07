@@ -16,8 +16,6 @@ public class BytecodeGenerator extends BaseBytecodeGenerator {
 
     @Override
     public String visitPost(AstProgramNode node, List<String> children) {
-        // TODO: Some child nodes may be null due to incomplete AST construction in AstBuilder.
-        // Once all node types are handled and children are always non-null, this check should be removed.
         enterNode();
         String bytecode = String.join("", children);
         exitNode();

@@ -10,6 +10,7 @@ public class AstParameterListNode extends AstNode {
     public AstParameterListNode(CodeLocation codeLocation, List<AstParameterNode> parameters) {
         super(codeLocation);
         this.parameters = parameters;
+        this.children.addAll(parameters);
     }
 
     @Override

@@ -1,4 +1,7 @@
 Program(1:0)
  DruckeStmt(1:0)
+  VarRef(1:7)
  DruckeStmt(2:0)
+  VarRef(2:7)
  DruckeStmt(3:0)
+  Literal(3:7)

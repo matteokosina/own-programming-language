@@ -13,6 +13,7 @@ public class AstFunctionDefinitionNode extends AstDeclNode {
         super(codeLocation, name, null);
         this.parameters = parameters;
         this.body = body;
+        this.children.add(parameters);
         this.children.addAll(body);
     }
 

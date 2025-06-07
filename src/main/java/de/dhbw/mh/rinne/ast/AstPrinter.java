@@ -1,6 +1,5 @@
 package de.dhbw.mh.rinne.ast;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AstPrinter extends AstVisitor<String> {
@@ -23,10 +22,7 @@ public class AstPrinter extends AstVisitor<String> {
 
     @Override
     public String visitChildren(AstNode node) {
-        // TODO: Some child nodes may be null due to incomplete AST construction in AstBuilder.
-        // Once all node types are handled and children are always non-null, this check should be removed.
-        return node.getChildren().stream().filter(Objects::nonNull).map(child -> child.accept(this))
-                .collect(Collectors.joining());
+        return node.getChildren().stream().map(child -> child.accept(this)).collect(Collectors.joining());
     }
 
     @Override
@@ -48,7 +44,7 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitVariableReference(AstVariableReferenceNode node) {
         enterNode();
-        String temp = indentationFor(level) + "VarRef(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "VarRef(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -65,7 +61,7 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitFunctionCall(AstFunctionCallNode node) {
         enterNode();
-        String temp = indentationFor(level) + "FuncCall(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "FuncCall(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -79,7 +75,8 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitFunctionDefinition(AstFunctionDefinitionNode node) {
         enterNode();
-        String temp = indentationFor(level) + "FunctionDefinition(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "FunctionDefinition(" + node.locationAsString() + ")\n"
+                + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -112,7 +109,7 @@ public class AstPrinter extends AstVisitor<String> {
     // Team 7
     public String visitDruckeStmt(AstDruckeStmtNode node) {
         enterNode();
-        String temp = indentationFor(level) + "DruckeStmt(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "DruckeStmt(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -121,7 +118,7 @@ public class AstPrinter extends AstVisitor<String> {
     @Override
     public String visitReturnStmt(AstReturnStmtNode node) {
         enterNode();
-        String temp = indentationFor(level) + "Return(" + node.locationAsString() + ")\n";
+        String temp = indentationFor(level) + "Return(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
@@ -138,6 +135,35 @@ public class AstPrinter extends AstVisitor<String> {
     public String visitCast(AstCastNode node) {
         enterNode();
         String temp = indentationFor(level) + "Cast(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    public String visitBinaryExpression(AstBinaryExpressionNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "BinOp(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    public String visitLiteral(AstLiteralNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Literal(" + node.locationAsString() + ")\n" + visitChildren(node);
+        exitNode();
+        return temp;
+    }
+
+    @Override
+    public String visitParameterList(AstParameterListNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    public String visitParameter(AstParameterNode node) {
+        enterNode();
+        String temp = indentationFor(level) + "Param(" + node.locationAsString() + ")\n" + visitChildren(node);
         exitNode();
         return temp;
     }
