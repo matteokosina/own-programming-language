@@ -7,21 +7,18 @@ import java.util.List;
 public class AstIfElseStmtNode extends AstStmtNode {
 
     final AstExpressionNode condition;
-    final List<AstStmtNode> statements;
+    final List<AstStmtNode> thenBlock;
     final List<AstStmtNode> elseBlock;
 
-    public AstIfElseStmtNode(CodeLocation codeLocation, AstExpressionNode condition, List<AstStmtNode> statements,
+    public AstIfElseStmtNode(CodeLocation codeLocation, AstExpressionNode condition, List<AstStmtNode> thenBlock,
             List<AstStmtNode> elseBlock) {
 
         super(codeLocation);
         this.condition = condition;
         this.elseBlock = elseBlock;
-
-        int temp = statements.size() - this.elseBlock.size();
-        this.statements = statements.subList(0, temp);
-
+        this.thenBlock = thenBlock;
         this.children.add(condition);
-        this.children.addAll(this.statements);
+        this.children.addAll(thenBlock);
         this.children.addAll(elseBlock);
     }
 

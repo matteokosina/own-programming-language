@@ -36,7 +36,7 @@ assignment
   ;
 
 ifStatement
-  : WENN LPAREN conditionalExpression RPAREN (statement)* ( ANSONSTEN (elseBlock+=statement)* )? PERIOD
+  : WENN LPAREN condition=conditionalExpression RPAREN (thenBlock+=statement)* ( ANSONSTEN (elseBlock+=statement)* )? PERIOD
   ;
 
 whileStatement
