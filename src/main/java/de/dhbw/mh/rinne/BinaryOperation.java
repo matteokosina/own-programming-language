@@ -1,6 +1,5 @@
 package de.dhbw.mh.rinne;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public enum BinaryOperation {
         Objects.requireNonNull(symbol, "lexeme must not be null");
         var type = SYMBOL_MAP.get(symbol);
         if (type == null) {
-            throw new IllegalArgumentException("Unknown RinneType: " + symbol);
+            throw new IllegalArgumentException("Unknown symbol: " + symbol);
         }
         return type;
     }

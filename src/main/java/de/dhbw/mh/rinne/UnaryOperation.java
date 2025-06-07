@@ -1,10 +1,23 @@
 package de.dhbw.mh.rinne;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public enum UnaryOperation {
 
     NOT("!", true), POSITIVE("+", false), NEGATIVE("-", false);
+
+    private static final Map<String, UnaryOperation> SYMBOL_MAP;
+
+    static {
+        Map<String, UnaryOperation> map = new HashMap<>();
+        for (var op : values()) {
+            map.put(op.symbol, op);
+        }
+        SYMBOL_MAP = Collections.unmodifiableMap(map);
+    }
 
     private final String symbol;
     private final boolean negation;
@@ -15,7 +28,12 @@ public enum UnaryOperation {
     }
 
     public static UnaryOperation fromSymbol(String symbol) {
-        return Arrays.stream(values()).filter(op -> op.symbol.equals(symbol)).findFirst().orElseThrow();
+        Objects.requireNonNull(symbol, "lexeme must not be null");
+        var type = SYMBOL_MAP.get(symbol);
+        if (type == null) {
+            throw new IllegalArgumentException("Unknown symbol: " + symbol);
+        }
+        return type;
     }
 
     public boolean isNegation() {

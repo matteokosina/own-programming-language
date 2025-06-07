@@ -1,15 +1,11 @@
 package de.dhbw.mh.rinne;
 
-import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
-import org.antlr.v4.runtime.dfa.DFA;
 
 import de.dhbw.mh.rinne.ast.AstNode;
 
