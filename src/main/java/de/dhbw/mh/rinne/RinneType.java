@@ -8,11 +8,12 @@ import java.util.Optional;
 
 public enum RinneType {
 
-    GANZZAHL("Ganzzahl", true), FLIEßZAHL("Fließzahl", true), SCHNUR("Schnur", false),
-    WAHRHEITSWERT("Wahrheitswert", false);
+    GANZZAHL("Ganzzahl", true, 2), FLIEßZAHL("Fließzahl", true, 2), SCHNUR("Schnur", false, 1),
+    WAHRHEITSWERT("Wahrheitswert", false, 1);
 
     private final String keyword;
     private final boolean numeric;
+    private final int sizeOnOperandStack;
 
     private static final Map<String, RinneType> KEYWORD_MAP;
 
@@ -24,9 +25,10 @@ public enum RinneType {
         KEYWORD_MAP = Collections.unmodifiableMap(map);
     }
 
-    private RinneType(String keyword, boolean numeric) {
+    private RinneType(String keyword, boolean numeric, int sizeOnOperandStack) {
         this.keyword = Objects.requireNonNull(keyword);
         this.numeric = numeric;
+        this.sizeOnOperandStack = sizeOnOperandStack;
     }
 
     /**
@@ -85,6 +87,10 @@ public enum RinneType {
             return Optional.of(FLIEßZAHL);
         }
         return Optional.empty();
+    }
+
+    public int sizeOnOperandStack() {
+        return sizeOnOperandStack;
     }
 
 }

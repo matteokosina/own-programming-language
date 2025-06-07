@@ -24,6 +24,7 @@ import de.dhbw.mh.rinne.antlr.RinneParser;
 import de.dhbw.mh.rinne.ast.AstNode;
 import de.dhbw.mh.rinne.ast.AstPrinter;
 import de.dhbw.mh.rinne.codegen.BytecodeGenerator;
+import de.dhbw.mh.rinne.codegen.SimpleVariableAllocator;
 import de.dhbw.mh.rinne.semantic.TypeChecker;
 import de.dhbw.mh.rinne.semantic.UsageChecker;
 import de.dhbw.mh.rinne.semantic.VariableResolver;
@@ -86,6 +87,8 @@ class EndToEndTest {
             String sourceCode = readFile(sourceFile);
             String expectedBytecode = readFile(expectedBytecodeFile);
             var ast = executeCompilerPipeline(sourceCode, dummyListener, dummyListener);
+            ast.accept(new VariableResolver());
+            ast.accept(new SimpleVariableAllocator());
             String bytecode = ast.accept(new BytecodeGenerator());
 
             assertThat(normalized(bytecode)).isEqualTo(normalized(expectedBytecode));

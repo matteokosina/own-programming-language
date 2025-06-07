@@ -1,13 +1,12 @@
 package de.dhbw.mh.rinne.codegen;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 import de.dhbw.mh.rinne.ast.AstProgramNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
-import de.dhbw.mh.rinne.ast.AstVisitor;
 
-public class BytecodeGenerator extends AstVisitor<String> {
+public class BytecodeGenerator extends BaseBytecodeGenerator {
 
     public void enterNode() {
     }
@@ -16,9 +15,9 @@ public class BytecodeGenerator extends AstVisitor<String> {
     }
 
     @Override
-    public String visitProgram(AstProgramNode node) {
+    public String visitPost(AstProgramNode node, List<String> children) {
         enterNode();
-        String bytecode = node.getChildren().stream().map(child -> child.accept(this)).collect(Collectors.joining());
+        String bytecode = String.join("", children);
         exitNode();
         return bytecode;
     }
@@ -29,7 +28,7 @@ public class BytecodeGenerator extends AstVisitor<String> {
         String bytecode = "";
         if (node.getInitializer() != null) {
             bytecode += node.getInitializer().accept(this);
-            bytecode += "istore <" + node.getName() + ">\n";
+            bytecode += "istore " + loadVariableIndex(node.getName()) + "\n";
         }
         exitNode();
         return bytecode;
@@ -38,7 +37,7 @@ public class BytecodeGenerator extends AstVisitor<String> {
     @Override
     public String visitVariableReference(AstVariableReferenceNode node) {
         enterNode();
-        String bytecode = "iload <" + node.getName() + ">\n";
+        String bytecode = "iload " + loadVariableIndex(node.getName()) + "\n";
         exitNode();
         return bytecode;
     }

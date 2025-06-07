@@ -104,7 +104,20 @@ public abstract class AstSemanticVisitor<T> extends AstVisitor<T> {
     }
 
     public T visitProgram(AstProgramNode node) {
-        return withScope(node.getScope(), () -> visitChildren(node));
+        return withScope(node.getScope(), () -> {
+            List<T> results = new LinkedList<>();
+            for (AstNode child : node.getChildren()) {
+                if (child == null) {
+                    continue;
+                }
+                results.add(child.accept(this));
+            }
+            return visitPost(node, results);
+        });
+    }
+
+    public T visitPost(AstProgramNode node, List<T> children) {
+        return null;
     }
 
     public T visitReturnStmt(AstReturnStmtNode node) {
