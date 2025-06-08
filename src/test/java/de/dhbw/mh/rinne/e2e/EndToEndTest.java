@@ -89,6 +89,7 @@ class EndToEndTest {
             var ast = executeCompilerPipeline(sourceCode, dummyListener, dummyListener);
             ast.accept(new VariableResolver());
             ast.accept(new SimpleVariableAllocator());
+            ast.accept(new TypeChecker());
             String bytecode = ast.accept(new BytecodeGenerator());
 
             assertThat(normalized(bytecode)).isEqualTo(normalized(expectedBytecode));

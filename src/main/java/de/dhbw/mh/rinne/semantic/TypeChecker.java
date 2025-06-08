@@ -7,6 +7,7 @@ import de.dhbw.mh.rinne.RinneType;
 import de.dhbw.mh.rinne.ast.AstLiteralNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
+import de.dhbw.mh.rinne.ast.AstLiteralNode.Wahrheitswert;
 
 public class TypeChecker extends BaseTypeChecker {
 
@@ -51,9 +52,35 @@ public class TypeChecker extends BaseTypeChecker {
         return null;
     }
 
+    // Team 1: Binary Operations
+
+    // Team 2: Unary Operations
+
+    // Team 3: Assignments
+
+    // Team 5: Literals
     @Override
     public RinneType visitLiteral(AstLiteralNode node) {
+        switch (node.getType()) {
+            case FLIEßZAHL:
+                break;
+            case GANZZAHL:
+                break;
+            case SCHNUR:
+                break;
+            case WAHRHEITSWERT:
+                if (node.getLexeme().equals("wahr")) {
+                    node.setValue(new Wahrheitswert(true));
+                } else if (node.getLexeme().equals("falsch")) {
+                    node.setValue(new Wahrheitswert(false));
+                }
+                break;
+            default:
+                break;
+        }
         return node.getType();
     }
+
+    // Lecturer
 
 }

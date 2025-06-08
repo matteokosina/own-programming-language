@@ -1,0 +1,3 @@
+istore 0
+ldc 1
+istore 1

@@ -20,4 +20,12 @@ public class AstPreCheckLoopNode extends AstStmtNode {
         return visitor.visitPreCheckLoop(this);
     }
 
+    public AstExpressionNode condition() {
+        return condition;
+    }
+
+    public AstScopedStmtsNode body() {
+        return scopedStmts;
+    }
+
 }

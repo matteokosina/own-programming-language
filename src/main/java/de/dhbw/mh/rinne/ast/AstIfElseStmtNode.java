@@ -1,8 +1,8 @@
 package de.dhbw.mh.rinne.ast;
 
-import de.dhbw.mh.rinne.CodeLocation;
-
 import java.util.List;
+
+import de.dhbw.mh.rinne.CodeLocation;
 
 public class AstIfElseStmtNode extends AstStmtNode {
 
@@ -26,4 +26,17 @@ public class AstIfElseStmtNode extends AstStmtNode {
     public <T> T accept(AstVisitor<T> visitor) {
         return visitor.visitIfElseStmt(this);
     }
+
+    public List<AstStmtNode> thenBlock() {
+        return thenBlock;
+    }
+
+    public List<AstStmtNode> elseBlock() {
+        return elseBlock;
+    }
+
+    public AstExpressionNode condition() {
+        return condition;
+    }
+
 }

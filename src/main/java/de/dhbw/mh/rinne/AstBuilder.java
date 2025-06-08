@@ -228,7 +228,7 @@ public class AstBuilder extends RinneBaseVisitor<AstNode> {
     public AstNode visitDoWhileStatement(RinneParser.DoWhileStatementContext ctx) {
         CodeLocation codeLoc = getCodeLocation(ctx);
 
-        String condition = ctx.conditionalExpression().getText();
+        AstExpressionNode condition = (AstExpressionNode) visit(ctx.conditionalExpression());
 
         List<AstStmtNode> body = new ArrayList<>();
 

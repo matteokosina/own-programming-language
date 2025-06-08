@@ -5,10 +5,10 @@ import de.dhbw.mh.rinne.CodeLocation;
 import java.util.List;
 
 public class AstPostCheckLoopNode extends AstStmtNode {
-    private final String condition;
+    private final AstExpressionNode condition;
     private final List<AstStmtNode> body;
 
-    public AstPostCheckLoopNode(CodeLocation codeLocation, String condition, List<AstStmtNode> body) {
+    public AstPostCheckLoopNode(CodeLocation codeLocation, AstExpressionNode condition, List<AstStmtNode> body) {
         super(codeLocation);
         this.condition = condition;
         this.body = body;
@@ -17,6 +17,14 @@ public class AstPostCheckLoopNode extends AstStmtNode {
     @Override
     public <T> T accept(AstVisitor<T> visitor) {
         return visitor.visitPostCheckLoop(this);
+    }
+
+    public AstExpressionNode condition() {
+        return condition;
+    }
+
+    public List<AstStmtNode> body() {
+        return body;
     }
 
 }

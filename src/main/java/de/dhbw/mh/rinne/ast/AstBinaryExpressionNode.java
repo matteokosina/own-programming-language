@@ -23,4 +23,16 @@ public class AstBinaryExpressionNode extends AstExpressionNode {
         return visitor.visitBinaryExpression(this);
     }
 
+    public AstExpressionNode lhs() {
+        return lhs;
+    }
+
+    public AstExpressionNode rhs() {
+        return rhs;
+    }
+
+    public BinaryOperation operation() {
+        return operator;
+    }
+
 }
