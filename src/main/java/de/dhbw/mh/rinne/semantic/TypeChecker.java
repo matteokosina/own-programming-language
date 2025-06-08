@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 
 import de.dhbw.mh.rinne.BinaryOperation;
 import de.dhbw.mh.rinne.RinneType;
+import de.dhbw.mh.rinne.ast.AstBinaryExpressionNode;
 import de.dhbw.mh.rinne.ast.AstLiteralNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
@@ -53,6 +54,14 @@ public class TypeChecker extends BaseTypeChecker {
     }
 
     // Team 1: Binary Operations
+    // @Override
+    public RinneType visitBinaryOperation(AstBinaryExpressionNode node) {
+        // switch node.op
+        // for every op, implement type checks and if needed, casts (only Ganzzahl ->
+        // Fließzahl)
+        // if cast not possible, throw new ClassCastException("Error description");
+        return null;
+    }
 
     // Team 2: Unary Operations
 
