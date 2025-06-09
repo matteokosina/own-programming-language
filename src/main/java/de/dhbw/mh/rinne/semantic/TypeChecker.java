@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 import de.dhbw.mh.rinne.BinaryOperation;
 import de.dhbw.mh.rinne.RinneType;
 import de.dhbw.mh.rinne.ast.AstBinaryExpressionNode;
-import de.dhbw.mh.rinne.ast.AstCastNode;
 import de.dhbw.mh.rinne.ast.AstLiteralNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
@@ -66,9 +65,9 @@ public class TypeChecker extends BaseTypeChecker {
                 break;
             case NEEDS_CAST:
                 if (lhsType != result.requiredType()) {
-                    // TODO: cast node.lhs() to result.requiredType()
+                    node.castLhs(lhsType);
                 } else {
-                    // TODO: cast node.rhs() to result.requiredType()
+                    node.castRhs(rhsType);
                 }
                 break;
             case INCOMPATIBLE:
