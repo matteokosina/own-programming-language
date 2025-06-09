@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import de.dhbw.mh.rinne.BinaryOperation;
 import de.dhbw.mh.rinne.RinneType;
 import de.dhbw.mh.rinne.ast.AstBinaryExpressionNode;
+import de.dhbw.mh.rinne.ast.AstCastNode;
 import de.dhbw.mh.rinne.ast.AstLiteralNode;
 import de.dhbw.mh.rinne.ast.AstVariableDeclarationStmtNode;
 import de.dhbw.mh.rinne.ast.AstVariableReferenceNode;
@@ -56,11 +57,26 @@ public class TypeChecker extends BaseTypeChecker {
     // Team 1: Binary Operations
     // @Override
     public RinneType visitBinaryOperation(AstBinaryExpressionNode node) {
-        // switch node.op
-        // for every op, implement type checks and if needed, casts (only Ganzzahl ->
-        // Fließzahl)
-        // if cast not possible, throw new ClassCastException("Error description");
-        return null;
+        RinneType lhsType = node.lhs().getType();
+        RinneType rhsType = node.rhs().getType();
+        TypeCheckResult result = BaseTypeChecker.checkBinaryOperation(lhsType, node.operation(), rhsType);
+
+        switch (result.status()) {
+            case OK:
+                break;
+            case NEEDS_CAST:
+                if (lhsType != result.requiredType()) {
+                    // TODO: cast node.lhs() to result.requiredType()
+                } else {
+                    // TODO: cast node.rhs() to result.requiredType()
+                }
+                break;
+            case INCOMPATIBLE:
+                throw new ClassCastException(
+                        String.format("incompatible types: '%s' cannot be used with '%s' for operation '%s'",
+                                lhsType, rhsType, node.operation()));
+        }
+        return result.requiredType();
     }
 
     // Team 2: Unary Operations
