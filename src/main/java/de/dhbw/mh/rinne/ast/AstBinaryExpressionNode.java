@@ -33,11 +33,11 @@ public class AstBinaryExpressionNode extends AstExpressionNode {
     }
 
     public void castLhs(RinneType targetType) {
-        lhs = new AstCastNode(lhs);
+        lhs = new AstCastNode(lhs, targetType);
     }
 
     public void castRhs(RinneType targetType) {
-        rhs = new AstCastNode(rhs);
+        rhs = new AstCastNode(rhs, targetType);
     }
 
     public BinaryOperation operation() {

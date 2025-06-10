@@ -72,8 +72,8 @@ public class TypeChecker extends BaseTypeChecker {
                 break;
             case INCOMPATIBLE:
                 throw new ClassCastException(
-                        String.format("incompatible types: '%s' cannot be used with '%s' for operation '%s'",
-                                lhsType, rhsType, node.operation()));
+                        String.format("incompatible types: '%s' cannot be used with '%s' for operation '%s'", lhsType,
+                                rhsType, node.operation()));
         }
         return result.requiredType();
     }
