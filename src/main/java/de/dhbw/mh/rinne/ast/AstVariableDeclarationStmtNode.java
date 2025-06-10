@@ -30,7 +30,7 @@ public class AstVariableDeclarationStmtNode extends AstDeclNode {
     }
 
     public void castInitializer(RinneType type) {
-        initializer = new AstCastNode(initializer);
+        initializer = new AstCastNode(initializer, type);
     }
 
 }
