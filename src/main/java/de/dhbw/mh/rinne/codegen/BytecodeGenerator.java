@@ -129,7 +129,7 @@ public class BytecodeGenerator extends BaseBytecodeGenerator {
         if (op.equals(BinaryOperation.LOR)) {
             String labelTrue = generateUniqueLabel("true");
             String labelEnd = generateUniqueLabel("end");
-            byteCode = String.format("%s\nifne %s\n%s\nifne %s\n%s\ngoto %s\n%s\n%s\n%s",
+            byteCode = String.format("%s\nifne %s\n%s\nifne %s\n%s\ngoto %s\n%s\n%s\n%s\n",
                     lhs,
                     labelTrue,
                     rhs,
@@ -139,10 +139,10 @@ public class BytecodeGenerator extends BaseBytecodeGenerator {
                     labelTrue,
                     pushTrue(),
                     labelEnd);
-        } else {
+        } else if (op.equals(BinaryOperation.LAND)) {
             String labelFalse = generateUniqueLabel("false");
             String labelEnd = generateUniqueLabel("end");
-            byteCode = String.format("%s\nifeq %s\n%s\nifeq %s\n%s\ngoto %s\n%s\n%s\n%s",
+            byteCode = String.format("%s\nifeq %s\n%s\nifeq %s\n%s\ngoto %s\n%s\n%s\n%s\n",
                     lhs,
                     labelFalse,
                     rhs,
@@ -152,6 +152,8 @@ public class BytecodeGenerator extends BaseBytecodeGenerator {
                     labelFalse,
                     pushFalse(),
                     labelEnd);
+        } else {
+            throw new RuntimeException("unexpected logical operation");
         }
         return byteCode;
     }
